@@ -23,7 +23,7 @@ public class Client implements Node {
 	}
 
 	@Override
-	public void run() throws IOException {
+	public void run() throws IOException, ClassNotFoundException {
 		Image image = Utility.receiveImage(socket);
 
 		if (image != null) {

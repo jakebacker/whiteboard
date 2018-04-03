@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -35,30 +36,34 @@ public class Utility {
 	public static void sendImage(Socket socket, BufferedImage image) throws IOException{
 		OutputStream os = socket.getOutputStream();
 
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		ImageIO.write(image, "jpg", byteArrayOutputStream);
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(os);
 
-		byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
-		os.write(size);
-		os.write(byteArrayOutputStream.toByteArray());
+		writeObject(objectOutputStream, image);
 		os.flush();
+//		os.close();
 	}
 
-	public static BufferedImage receiveImage(Socket socket) throws IOException{
+	public static BufferedImage receiveImage(Socket socket) throws IOException, ClassNotFoundException {
 		InputStream inputStream = socket.getInputStream();
+		ObjectInputStream ois = new ObjectInputStream(inputStream);
 
-		byte[] sizeAr = new byte[4];
-		inputStream.read(sizeAr);
-		int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
+		final BufferedImage image = readObject(ois);
 
-		System.out.println(Arrays.toString(sizeAr));
-		System.out.println(size);
-
-		byte[] imageAr = new byte[size];
-		inputStream.read(imageAr);
-
-		BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
-
+//		inputStream.close();
 		return image;
 	}
+
+	private static void writeObject(ObjectOutputStream out, final BufferedImage image) throws IOException {
+//		out.defaultWriteObject();
+		ImageIO.write(image, "png", out); // png is lossless
+	}
+
+	private static BufferedImage readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+//		in.defaultReadObject();
+		final BufferedImage image = ImageIO.read(in);
+		return image;
+	}
+
+
+
 }
