@@ -1,5 +1,9 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.Socket;
+import java.nio.ByteBuffer;
 
 public class Utility {
 	/**
@@ -25,5 +29,32 @@ public class Utility {
 
 		// Return the buffered image
 		return bimage;
+	}
+
+	public static void sendImage(Socket socket, BufferedImage image) throws IOException{
+		OutputStream os = socket.getOutputStream();
+
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		ImageIO.write(image, "jpg", byteArrayOutputStream);
+
+		byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+		os.write(size);
+		os.write(byteArrayOutputStream.toByteArray());
+		os.flush();
+	}
+
+	public static BufferedImage receiveImage(Socket socket) throws IOException{
+		InputStream inputStream = socket.getInputStream();
+
+		byte[] sizeAr = new byte[4];
+		inputStream.read(sizeAr);
+		int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
+
+		byte[] imageAr = new byte[size];
+		inputStream.read(imageAr);
+
+		BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
+
+		return image;
 	}
 }

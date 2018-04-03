@@ -70,4 +70,8 @@ public class Whiteboard extends JFrame {
 		// add to content pane
 		content.add(controls, BorderLayout.NORTH);
 	}
+
+	public Image getImage() {
+		return board.getImage();
+	}
 }

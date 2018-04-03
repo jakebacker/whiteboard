@@ -54,17 +54,17 @@ public class Board extends JComponent {
 	}
 
 	protected void paintComponent(Graphics g) {
-		if (image == null) {
-			// image to draw null ==> we create
-			image = createImage(getSize().width, getSize().height);
-			g2 = (Graphics2D) image.getGraphics();
-			// enable antialiasing
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			// clear draw area
-			clear();
-		}
+			if (image == null) {
+				// image to draw null ==> we create
+				image = createImage(getSize().width, getSize().height);
+				g2 = (Graphics2D) image.getGraphics();
+				// enable antialiasing
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				// clear draw area
+				clear();
+			}
 
-		g.drawImage(image, 0, 0, null);
+			g.drawImage(image, 0, 0, null);
 	}
 
 	// now we create exposed methods
@@ -97,4 +97,11 @@ public class Board extends JComponent {
 		g2.setPaint(Color.blue);
 	}
 
+	public void drawImage(Image image) {
+		this.image = image;
+	}
+
+	public Image getImage() {
+		return image;
+	}
 }
