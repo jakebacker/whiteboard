@@ -24,10 +24,16 @@ public class Client implements Node {
 
 	@Override
 	public void run() throws IOException {
-		Image image = Utility.receiveImage(socket);
+		if (whiteboard == null) {
+			return;
+		}
+		Image tempImage = whiteboard.getImage();
+
+		Image image = Utility.receiveImage(socket,tempImage != null ? Utility.toBufferedImage(whiteboard.getImage()) : null);
 
 		if (image != null) {
 			whiteboard.drawImage(image);
+			whiteboard.repaint();
 		}
 	}
 }

@@ -25,6 +25,7 @@ public class Board extends JComponent {
 	private int currentX, currentY, oldX, oldY;
 
 	public Board() {
+
 		setDoubleBuffered(false);
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {

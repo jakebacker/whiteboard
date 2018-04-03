@@ -44,15 +44,16 @@ public class Utility {
 		os.flush();
 	}
 
-	public static BufferedImage receiveImage(Socket socket) throws IOException{
+	public static BufferedImage receiveImage(Socket socket, BufferedImage previousImage) throws IOException{
 		InputStream inputStream = socket.getInputStream();
 
 		byte[] sizeAr = new byte[4];
 		inputStream.read(sizeAr);
 		int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
 
-		System.out.println(Arrays.toString(sizeAr));
-		System.out.println(size);
+		if (size <= 0 || size >= Integer.MAX_VALUE) {
+			return previousImage;
+		}
 
 		byte[] imageAr = new byte[size];
 		inputStream.read(imageAr);
