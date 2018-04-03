@@ -74,4 +74,8 @@ public class Whiteboard extends JFrame {
 	public Image getImage() {
 		return board.getImage();
 	}
+
+	public void drawImage(Image image) {
+		board.drawImage(image);
+	}
 }

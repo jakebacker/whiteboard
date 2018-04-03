@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.io.IOException;
+import java.net.SocketException;
 
 public class Runner {
 
@@ -8,20 +9,24 @@ public class Runner {
 	public static Node node;
 
 	public static void main(String[] args) {
-		String type = args[0];
+		String type = args[0].toLowerCase();
 
 		try {
-			if (type.equals("Server")) {
+			if (type.equals("server")) {
 				mode = Mode.SERVER;
 				node = new Server();
-			} else if (type.equals("Client")) {
+			} else if (type.equals("client")) {
 				mode = Mode.CLIENT;
-
+				node = new Client();
 			} else {
 				throw new IllegalArgumentException();
 			}
-		} catch (IOException e) {
+			while (true) {
+				node.run();
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 }

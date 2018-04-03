@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class Utility {
 	/**
@@ -49,6 +50,9 @@ public class Utility {
 		byte[] sizeAr = new byte[4];
 		inputStream.read(sizeAr);
 		int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
+
+		System.out.println(Arrays.toString(sizeAr));
+		System.out.println(size);
 
 		byte[] imageAr = new byte[size];
 		inputStream.read(imageAr);

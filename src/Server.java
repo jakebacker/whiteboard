@@ -14,10 +14,11 @@ public class Server implements Node{
 		EventQueue.invokeLater(() -> {
 			whiteboard = new Whiteboard();
 			whiteboard.setVisible(true);
+			whiteboard.setTitle("Whiteboard | Server");
 		});
 
 		serverSocket = new ServerSocket(port, 0, InetAddress.getByName("localhost"));
-		System.out.println("Hosting on " + serverSocket.getInetAddress());
+		System.out.println("Hosting on " + serverSocket.getInetAddress() + ":" + serverSocket.getLocalPort());
 		socket = serverSocket.accept();
 		System.out.println("Connected to " + socket.getInetAddress());
 	}
