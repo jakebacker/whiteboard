@@ -21,6 +21,13 @@ public class Server implements Node{
 		System.out.println("Hosting on " + serverSocket.getInetAddress() + ":" + serverSocket.getLocalPort());
 		socket = serverSocket.accept();
 		System.out.println("Connected to " + socket.getInetAddress());
+
+
+		if (!Utility.sendTest(socket)) {
+			throw new IOException();
+		} else {
+			System.out.println("Connection Success");
+		}
 	}
 
 	public Server() throws IOException{

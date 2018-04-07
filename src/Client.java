@@ -16,6 +16,12 @@ public class Client implements Node {
 		socket = new Socket(ip, port);
 
 		System.out.println("Connected to " + socket.getInetAddress() + ":" + socket.getLocalPort());
+
+		if (!Utility.recieveTest(socket)) {
+			throw new IOException();
+		} else {
+			System.out.println("Connection Success");
+		}
 	}
 
 	public Client() throws IOException{
@@ -24,6 +30,7 @@ public class Client implements Node {
 
 	@Override
 	public void run() throws IOException {
+		System.out.println("Run");
 		if (whiteboard == null) {
 			return;
 		}

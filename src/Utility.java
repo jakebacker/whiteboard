@@ -7,6 +7,9 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class Utility {
+
+	private static final String TEST_DATA = "Connected";
+
 	/**
 	 * Converts a given Image into a BufferedImage
 	 *
@@ -44,6 +47,26 @@ public class Utility {
 		os.flush();
 	}
 
+	public static boolean sendTest(Socket socket){
+
+		try {
+			OutputStream os = socket.getOutputStream();
+
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			byteArrayOutputStream.write(TEST_DATA.getBytes());
+
+			byte[] size = ByteBuffer.allocate(4).putInt(byteArrayOutputStream.size()).array();
+			os.write(size);
+			os.write(byteArrayOutputStream.toByteArray());
+			os.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
 	public static BufferedImage receiveImage(Socket socket, BufferedImage previousImage) throws IOException{
 		InputStream inputStream = socket.getInputStream();
 
@@ -61,5 +84,34 @@ public class Utility {
 		BufferedImage image = ImageIO.read(new ByteArrayInputStream(imageAr));
 
 		return image;
+	}
+
+	public static boolean recieveTest(Socket socket) {
+		try {
+			InputStream inputStream = socket.getInputStream();
+
+			byte[] sizeAr = new byte[4];
+			inputStream.read(sizeAr);
+
+			int size = ByteBuffer.wrap(sizeAr).asIntBuffer().get();
+
+			if (size <= 0 || size >= Integer.MAX_VALUE) {
+				throw new IOException();
+			}
+
+			byte[] dataAr = new byte[size];
+			inputStream.read(dataAr);
+
+			String data = new String(dataAr);
+
+			if (data.equals(TEST_DATA)) {
+				return true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return false;
 	}
 }
